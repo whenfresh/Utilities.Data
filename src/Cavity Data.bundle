@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         DefaultTargets="Run"
+         ToolsVersion="4.0">
+  <ImportGroup>
+    <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks" />
+  </ImportGroup>
+  <ItemGroup>
+    <NuGetLibDir Include="$(MSBuildProjectDirectory)\.nuget\lib\net20" />
+    <NuGetLibDir Include="$(MSBuildProjectDirectory)\.nuget\lib\net35" />
+    <NuGetLibDir Include="$(MSBuildProjectDirectory)\.nuget\lib\net40" />
+    <NuSpecFiles Include="$(MSBuildProjectDirectory)\.nuget\*.nuspec" />
+  </ItemGroup>
+  <PropertyGroup>
+    <NuPkgDirectory>$(MSBuildProjectDirectory)\.nuget\packages</NuPkgDirectory>
+  </PropertyGroup>
+  <Target Name="Run">
+    <MakeDir Directories="%(NuGetLibDir.Identity)"
+             Condition="!Exists('%(NuGetLibDir.Identity)')"/>
+             
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Class Libraries\Data\bin\Release net20 AnyCPU\Cavity.Data.dll"
+          DestinationFolder="$(MSBuildProjectDirectory)\.nuget\lib\net20" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Class Libraries\Data\bin\Release net35 AnyCPU\Cavity.Data.dll"
+          DestinationFolder="$(MSBuildProjectDirectory)\.nuget\lib\net35" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Class Libraries\Data\bin\Release net40 AnyCPU\Cavity.Data.dll"
+          DestinationFolder="$(MSBuildProjectDirectory)\.nuget\lib\net40" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Class Libraries\Data.Xunit\bin\Release net20 AnyCPU\Cavity.Data.Xunit.dll"
+          DestinationFolder="$(MSBuildProjectDirectory)\.nuget\lib\net20" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Class Libraries\Data.Xunit\bin\Release net35 AnyCPU\Cavity.Data.Xunit.dll"
+          DestinationFolder="$(MSBuildProjectDirectory)\.nuget\lib\net35" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Class Libraries\Data.Xunit\bin\Release net40 AnyCPU\Cavity.Data.Xunit.dll"
+          DestinationFolder="$(MSBuildProjectDirectory)\.nuget\lib\net40" />
+    <CallTarget Targets="nuget pack" />
+  </Target>
+  <Target Name="nuget pack">
+    <MSBuild.ExtensionPack.Framework.MsBuildHelper TaskAction="GetItemCount"
+                                                   InputItems1="@(NuSpecFiles)">
+      <Output TaskParameter="ItemCount" PropertyName="NuSpecFilesCount"/>
+    </MSBuild.ExtensionPack.Framework.MsBuildHelper>
+    <MakeDir Directories="$(NuPkgDirectory)"
+             Condition="'$(NuSpecFilesCount)' != '0' And !Exists('$(NuPkgDirectory)')" />
+    <Exec Command="nuget pack &quot;%(NuSpecFiles.Identity)&quot;"
+          WorkingDirectory="$(NuPkgDirectory)"
+          Condition="'$(NuSpecFilesCount)' != '0'" />
+  </Target>
+</Project>

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Cavity.Data.Facts</AssemblyName>
+    <ProjectGuid>{DA99C4A9-E438-44F9-988B-54E274EABDC6}</ProjectGuid>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Data\DataFile.Derived.cs" />
+    <Compile Include="Data\DataSheet.Derived.cs" />
+    <Compile Include="Data\TestAdditionTransformer.cs" />
+    <Compile Include="Data\TestConcatenationTransformer.cs" />
+    <Compile Include="Data\TestDataEntry.cs" />
+    <Compile Include="Data\TestEntryFile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Properties\CodeAnalysis.dictionary" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersionNumber)' &gt; '2.0' ">
+    <Compile Include="Data\DataShard.Facts.cs" />
+    <Compile Include="Data\IIdentifyShard.Facts.cs" />
+    <Compile Include="Data\ITransformData`1.Facts.cs" />
+    <Compile Include="Data\ITransformData.Facts.cs" />
+    <Compile Include="Data\JaggedCsvReader.Facts.cs" />
+    <Compile Include="Data\ShardByValue.Facts.cs" />
+    <Compile Include="Data\Csv.Facts.cs" />
+    <Compile Include="Data\Csv.String.ExtensionMethods.Facts.cs" />
+    <Compile Include="Data\CsvDataFile.Facts.cs" />
+    <Compile Include="Data\CsvDataSheet.Facts.cs" />
+    <Compile Include="Data\CsvStreamReader.Facts.cs" />
+    <Compile Include="Data\DataFile.Facts.cs" />
+    <Compile Include="Data\DataSheet.Facts.cs" />
+    <Compile Include="Data\IDataSheet.Facts.cs" />
+    <Compile Include="Data\Tsv.Facts.cs" />
+    <Compile Include="Data\TsvDataFile.Facts.cs" />
+    <Compile Include="Data\TsvDataSheet.Facts.cs" />
+    <Compile Include="Data\TsvStreamReader.Facts.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersionNumber)' &gt;= '3.5' ">
+    <Compile Include="IO\DataFileCreation.Facts.cs" />
+    <Compile Include="IO\TempCsvFile.Facts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Cavity.Core">
+      <HintPath>..\..\packages\Cavity.Core.2.0.0.970\lib\$(TargetFrameworkVersionName)\Cavity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersionNumber)' &gt; '2.0' ">
+    <Reference Include="Cavity.Testing.Unit">
+      <HintPath>..\..\packages\Cavity.Testing.Unit.2.0.0.848\lib\$(TargetFrameworkVersionName)\Cavity.Testing.Unit.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.2.1409.1722\lib\$(TargetFrameworkVersionName)\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersionNumber)' &gt;= '3.5' ">
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersionNumber)' &gt;= '4.0' ">
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{38529187-FBC4-40D3-895B-13DD54BE1BDB}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Cavity 2.0\AnyCPU.platform" />
+  <Import Project="$(MSBuildExtensionsPath)\Cavity 2.0\Tests.project" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- 
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

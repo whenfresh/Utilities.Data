@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA649B29-BDED-4131-B878-08505A7E3E27}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\Cavity Data xUnit Extensions.nuspec = .nuget\Cavity Data xUnit Extensions.nuspec
+		Cavity Data.bundle = Cavity Data.bundle
+		.nuget\Cavity Data.nuspec = .nuget\Cavity Data.nuspec
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Class Libraries", "Class Libraries", "{FA0C87A9-1BDC-4216-9305-1D894DD9F125}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Class Libraries\Data\Data.csproj", "{38529187-FBC4-40D3-895B-13DD54BE1BDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Facts", "Class Libraries\Data.Facts\Data.Facts.csproj", "{DA99C4A9-E438-44F9-988B-54E274EABDC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Xunit", "Class Libraries\Data.Xunit\Data.Xunit.csproj", "{D1216F26-1703-402D-AD8A-67865A16416A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Xunit.Facts", "Class Libraries\Data.Xunit.Facts\Data.Xunit.Facts.csproj", "{4F3355AE-8B59-4A1D-BBD6-16E1D7236E96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38529187-FBC4-40D3-895B-13DD54BE1BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38529187-FBC4-40D3-895B-13DD54BE1BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38529187-FBC4-40D3-895B-13DD54BE1BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38529187-FBC4-40D3-895B-13DD54BE1BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA99C4A9-E438-44F9-988B-54E274EABDC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA99C4A9-E438-44F9-988B-54E274EABDC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA99C4A9-E438-44F9-988B-54E274EABDC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA99C4A9-E438-44F9-988B-54E274EABDC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1216F26-1703-402D-AD8A-67865A16416A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1216F26-1703-402D-AD8A-67865A16416A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1216F26-1703-402D-AD8A-67865A16416A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1216F26-1703-402D-AD8A-67865A16416A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F3355AE-8B59-4A1D-BBD6-16E1D7236E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F3355AE-8B59-4A1D-BBD6-16E1D7236E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F3355AE-8B59-4A1D-BBD6-16E1D7236E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F3355AE-8B59-4A1D-BBD6-16E1D7236E96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{38529187-FBC4-40D3-895B-13DD54BE1BDB} = {FA0C87A9-1BDC-4216-9305-1D894DD9F125}
+		{DA99C4A9-E438-44F9-988B-54E274EABDC6} = {FA0C87A9-1BDC-4216-9305-1D894DD9F125}
+		{D1216F26-1703-402D-AD8A-67865A16416A} = {FA0C87A9-1BDC-4216-9305-1D894DD9F125}
+		{4F3355AE-8B59-4A1D-BBD6-16E1D7236E96} = {FA0C87A9-1BDC-4216-9305-1D894DD9F125}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Cavity.Data.Xunit</id>
+    <version>16.04.19.1640</version>
+    <title>Cavity Data (CSV, TSV) xUnit Extensions</title>
+    <authors>Alan Dean</authors>
+    <owners />
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>https://github.com/cavity-project/data</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/cavity-project/logo/master/nuget.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides xUnit extensions for data files, including CSV (comma-separated) and TSV (tab-separated).</description>
+    <summary />
+    <copyright>Copyright © 2010 - 2016 Alan Dean</copyright>
+    <language />
+    <tags>Data TDD xUnit</tags>
+    <releaseNotes />
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Data" />
+    </frameworkAssemblies>
+    <dependencies>
+      <dependency id="Cavity.Data" version="2.0.0.970" />
+      <dependency id="xunit.extensions" version="1.9.2" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="lib\net20\Cavity.Data.Xunit.dll" target="lib\net20\Cavity.Data.Xunit.dll" />
+    <file src="lib\net35\Cavity.Data.Xunit.dll" target="lib\net35\Cavity.Data.Xunit.dll" />
+    <file src="lib\net40\Cavity.Data.Xunit.dll" target="lib\net40\Cavity.Data.Xunit.dll" />
+  </files>
+</package>
