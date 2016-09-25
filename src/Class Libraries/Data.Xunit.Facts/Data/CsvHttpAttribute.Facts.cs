@@ -41,7 +41,7 @@
             Assert.Throws<ArgumentNullException>(() => new CsvHttpAttribute(null));
         }
 
-        [Fact]
+        [Fact(Skip = "www.alan-dean.com")]
         public void op_Download_AbsoluteUri()
         {
             const string expected = "A1";
@@ -50,7 +50,7 @@
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
+        [Fact(Skip = "www.alan-dean.com")]
         public void op_Download_AbsoluteUriNotFound()
         {
             Assert.Throws<WebException>(() => CsvHttpAttribute.Download("http://www.alan-dean.com/missing.csv"));
@@ -70,7 +70,7 @@
             Assert.Throws<ArgumentNullException>(() => obj.GetData(null, new[] { typeof(CsvDataSheet) }).ToList());
         }
 
-        [Fact]
+        [Fact(Skip = "www.alan-dean.com")]
         public void op_GetData_MethodInfo_TypesNull()
         {
             var obj = new CsvHttpAttribute("http://www.alan-dean.com/example.csv");
@@ -78,7 +78,7 @@
             Assert.Throws<ArgumentNullException>(() => obj.GetData(GetType().GetMethod("usage"), null).ToList());
         }
 
-        [Fact]
+        [Fact(Skip = "www.alan-dean.com")]
         public void op_GetData_MethodInfo_Types_whenInvalidParameterType()
         {
             var obj = new CsvHttpAttribute("http://www.alan-dean.com/example.csv");
@@ -86,7 +86,7 @@
             Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(string) }).ToList());
         }
 
-        [Fact]
+        [Fact(Skip = "www.alan-dean.com")]
         public void op_GetData_MethodInfo_Types_whenParameterCountMismatch()
         {
             var obj = new CsvHttpAttribute("http://www.alan-dean.com/one.csv", "http://www.alan-dean.com/two.csv");
@@ -103,7 +103,7 @@
                             .Result);
         }
 
-        [Theory]
+        [Theory(Skip = "www.alan-dean.com")]
         [CsvHttp("http://www.alan-dean.com/example.csv")]
         public void usage(CsvDataSheet sheet)
         {
@@ -111,7 +111,7 @@
             Assert.Equal("B2", sheet.Last()["B"]);
         }
 
-        [Theory]
+        [Theory(Skip = "www.alan-dean.com")]
         [CsvHttp("http://www.alan-dean.com/one.csv", "http://www.alan-dean.com/two.csv")]
         public void usage_whenDataSet(DataSet data)
         {
@@ -124,7 +124,7 @@
             Assert.Equal("two", data.Tables[1].Rows[0].Field<string>("COLUMN"));
         }
 
-        [Theory]
+        [Theory(Skip = "www.alan-dean.com")]
         [CsvHttp("http://www.alan-dean.com/example.csv")]
         [CsvHttp("http://www.alan-dean.com/example.csv")]
         public void usage_whenDataTable(DataTable table)
@@ -138,7 +138,7 @@
             Assert.Equal("B2", table.Rows[1].Field<string>("B"));
         }
 
-        [Theory]
+        [Theory(Skip = "www.alan-dean.com")]
         [CsvHttp("http://www.alan-dean.com/example.csv")]
         public void usage_whenIEnumerableParameter(IEnumerable<KeyStringDictionary> data)
         {
@@ -149,7 +149,7 @@
             // ReSharper restore PossibleMultipleEnumeration
         }
 
-        [Theory]
+        [Theory(Skip = "www.alan-dean.com")]
         [CsvHttp("http://www.alan-dean.com/one.csv", "http://www.alan-dean.com/two.csv")]
         public void usage_whenMultipleParameters(CsvDataSheet one,
                                                  CsvDataSheet two)
