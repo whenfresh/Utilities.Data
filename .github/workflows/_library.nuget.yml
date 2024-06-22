@@ -1,0 +1,61 @@
+on:
+  workflow_call:
+    inputs:
+      config:
+        description: "Build configuration to use, defaults to Release"
+        required: false
+        type: string
+        default: Release
+
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    name: Build and deploy CI package
+    steps:
+      - name: Set env vars
+        run: echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+      - name: Set env vars
+        run: echo "SOLUTION_NAME=${REPOSITORY_NAME}.sln" >> $GITHUB_ENV
+      - name: Set env vars
+        run: echo "PROJECT_TO_PACK=${REPOSITORY_NAME#*.}" >> $GITHUB_ENV
+    
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+  
+      - uses: actions/setup-dotnet@v4
+        name: Setup .NET
+        id: setup-dotnet
+        with:
+          dotnet-version: 8.0.200
+  
+      - name: Add Custom NuGet Feed to .NET
+        run: dotnet nuget update source whenfresh.github.com --username whenfresh --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --configfile NuGet.config
+        shell: bash
+  
+      - name: Install GitVersion
+        run: dotnet tool install --global GitVersion.Tool --version 6.0.0-beta.7
+      
+      - name: Set Version Number
+        run: dotnet-gitversion  /updateprojectfiles /output buildserver
+        
+      - name: Restore dependencies
+        run: dotnet restore "${SOLUTION_NAME}"
+        shell: bash
+  
+      - name: Build
+        run: dotnet build "${SOLUTION_NAME}" --no-restore --configuration ${{ inputs.config }}
+        shell: bash
+  
+      - name: Test
+        run: dotnet test "${SOLUTION_NAME}" --no-build --configuration ${{ inputs.config }}
+        shell: bash
+  
+      - name: Package
+        run: dotnet pack "src/Class Libraries/${PROJECT_TO_PACK}/${PROJECT_TO_PACK}.csproj" --no-build --configuration ${{ inputs.config }} --output ./packages
+        shell: bash
+  
+      - name: NuGet Push
+        run: dotnet nuget push packages/*.nupkg --source whenfresh.github.com --skip-duplicate 
+        shell: bash
