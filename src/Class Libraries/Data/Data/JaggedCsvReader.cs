@@ -1,9 +1,6 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.IO;
     using System.Text;
 
     public class JaggedCsvReader : StreamReader

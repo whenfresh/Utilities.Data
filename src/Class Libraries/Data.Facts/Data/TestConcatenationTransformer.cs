@@ -1,8 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System.Collections.Generic;
-    using Cavity.Collections;
-
     public sealed class TestConcatenationTransformer : ITransformData
     {
         public IEnumerable<KeyStringDictionary> Transform(IEnumerable<KeyStringDictionary> data)

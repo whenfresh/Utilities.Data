@@ -1,19 +1,22 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Xunit.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Globalization;
     using System.IO;
-#if !NET20
     using System.Linq;
-#endif
     using System.Net;
     using System.Reflection;
-    using Cavity.Collections;
-    using Cavity.IO;
-    using Cavity.Properties;
-    using Xunit.Extensions;
+    using global::Xunit.Extensions;
+    using global::Xunit.Sdk;
+    using WhenFresh.Utilities.Core;
+    using WhenFresh.Utilities.Core.Collections;
+    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.Data.Data;
+    using WhenFresh.Utilities.Data.Xunit.Properties;
+#if !NET20
+#endif
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public sealed class TsvHttpAttribute : DataAttribute
@@ -75,9 +78,11 @@
             return tsv;
         }
 
-        public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest,
-                                                      Type[] parameterTypes)
+        public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
         {
+            
+            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.GetType()).ToArray();
+
             if (null == methodUnderTest)
             {
                 throw new ArgumentNullException("methodUnderTest");

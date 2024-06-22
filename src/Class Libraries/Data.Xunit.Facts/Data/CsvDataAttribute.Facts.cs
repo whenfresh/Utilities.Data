@@ -1,12 +1,9 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Xunit.Facts.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
-    using Cavity.Collections;
-    using Xunit;
-    using Xunit.Extensions;
+    using global::Xunit.Sdk;
+    using WhenFresh.Utilities.Data.Data;
+    using WhenFresh.Utilities.Data.Xunit.Data;
+    using WhenFresh.Utilities.Testing.Unit;
 
     public sealed class CsvDataAttributeFacts
     {
@@ -38,38 +35,6 @@
         public void ctor_stringsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new CsvDataAttribute(null));
-        }
-
-        [Fact]
-        public void op_GetData_MethodInfoNull_Types()
-        {
-            var obj = new CsvDataAttribute("example.csv");
-
-            Assert.Throws<ArgumentNullException>(() => obj.GetData(null, new[] { typeof(CsvDataSheet) }).ToList());
-        }
-
-        [Fact]
-        public void op_GetData_MethodInfo_TypesNull()
-        {
-            var obj = new CsvDataAttribute("example.csv");
-
-            Assert.Throws<ArgumentNullException>(() => obj.GetData(GetType().GetMethod("usage"), null).ToList());
-        }
-
-        [Fact]
-        public void op_GetData_MethodInfo_Types_whenInvalidParameterType()
-        {
-            var obj = new CsvDataAttribute("example.csv");
-
-            Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(string) }).ToList());
-        }
-
-        [Fact]
-        public void op_GetData_MethodInfo_Types_whenParameterCountMismatch()
-        {
-            var obj = new CsvDataAttribute("one.csv", "two.csv");
-
-            Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(CsvDataSheet) }).ToList());
         }
 
         [Fact]

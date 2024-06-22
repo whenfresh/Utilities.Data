@@ -1,8 +1,6 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System.Collections.Generic;
     using System.Xml;
-    using Cavity.Collections;
 
     public sealed class TestAdditionTransformer : ITransformData<int>
     {

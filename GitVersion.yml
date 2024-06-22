@@ -1,0 +1,15 @@
+assembly-versioning-scheme: MajorMinorPatchTag
+assembly-file-versioning-scheme: MajorMinorPatchTag
+tag-prefix: '[vV]?'
+
+version-in-branch-pattern: '(?<version>[vV]?\d+(\.\d+)?(\.\d+)?).*'
+
+commit-message-incrementing: Enabled
+major-version-bump-message: '\+semver:\s?(breaking|major)'
+minor-version-bump-message: '\+semver:\s?(feature|minor)'
+patch-version-bump-message: '\+semver:\s?(fix|patch)'
+
+branches:
+  main:
+    label: preview
+    regex: '^master$|^main$'

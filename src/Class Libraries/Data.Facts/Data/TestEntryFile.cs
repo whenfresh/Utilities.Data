@@ -1,8 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System.IO;
-    using Cavity.Collections;
-
     public sealed class TestEntryFile
     {
         public TestEntryFile(FileInfo info)

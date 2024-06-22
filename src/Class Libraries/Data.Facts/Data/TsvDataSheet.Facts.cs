@@ -1,13 +1,8 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using Cavity.Collections;
-    using Cavity.IO;
-    using Xunit;
+    using WhenFresh.Utilities.Core.IO;
 
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "DataSheet", Justification = "This is the correct casing.")]
     public sealed class TsvDataSheetFacts

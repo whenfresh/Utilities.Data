@@ -1,11 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using Cavity.Collections;
-    using Xunit;
-    using Xunit.Extensions;
-
     public sealed class ShardByValueFacts
     {
         [Fact]

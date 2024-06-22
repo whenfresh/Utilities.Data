@@ -1,10 +1,6 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using Cavity.IO;
-    using Xunit;
+    using WhenFresh.Utilities.Core.IO;
 
     public sealed class TsvDataFileFacts
     {

@@ -1,9 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using System.IO;
-    using Xunit;
-
     public sealed class JaggedCsvReaderFacts
     {
         [Fact]

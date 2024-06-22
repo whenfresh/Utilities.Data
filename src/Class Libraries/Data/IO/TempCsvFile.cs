@@ -1,10 +1,7 @@
-﻿namespace Cavity.IO
+﻿namespace WhenFresh.Utilities.Data.IO
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Cavity.Collections;
-    using Cavity.Data;
+    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.Data.Data;
 
     public sealed class TempCsvFile : TempFile
     {

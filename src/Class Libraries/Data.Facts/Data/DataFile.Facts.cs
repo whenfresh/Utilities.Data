@@ -1,11 +1,6 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Cavity.IO;
-    using Xunit;
-    using Xunit.Extensions;
+    using WhenFresh.Utilities.Core.IO;
 
     public sealed class DataFileFacts
     {

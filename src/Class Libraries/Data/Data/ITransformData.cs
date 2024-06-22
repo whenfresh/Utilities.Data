@@ -1,8 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using System.Collections.Generic;
-    using Cavity.Collections;
-
     public interface ITransformData
     {
         IEnumerable<KeyStringDictionary> Transform(IEnumerable<KeyStringDictionary> data);

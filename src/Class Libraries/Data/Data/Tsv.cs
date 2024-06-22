@@ -1,16 +1,11 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-#if !NET20
     using System.Linq;
-#endif
     using System.Text;
-    using Cavity.Collections;
-    using Cavity.IO;
+    using WhenFresh.Utilities.Core.IO;
+#if !NET20
+#endif
 
     public static class Tsv
     {

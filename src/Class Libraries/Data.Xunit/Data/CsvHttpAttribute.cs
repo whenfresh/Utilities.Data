@@ -1,19 +1,22 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Xunit.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Globalization;
     using System.IO;
-#if !NET20
     using System.Linq;
-#endif
     using System.Net;
     using System.Reflection;
-    using Cavity.Collections;
-    using Cavity.IO;
-    using Cavity.Properties;
-    using Xunit.Extensions;
+    using global::Xunit.Extensions;
+    using global::Xunit.Sdk;
+    using WhenFresh.Utilities.Core;
+    using WhenFresh.Utilities.Core.Collections;
+    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.Data.Data;
+    using WhenFresh.Utilities.Data.Xunit.Properties;
+#if !NET20
+#endif
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public sealed class CsvHttpAttribute : DataAttribute
@@ -75,19 +78,16 @@
             return csv;
         }
 
-        public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest,
-                                                      Type[] parameterTypes)
+        public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
         {
             if (null == methodUnderTest)
             {
                 throw new ArgumentNullException("methodUnderTest");
             }
 
-            if (null == parameterTypes)
-            {
-                throw new ArgumentNullException("parameterTypes");
-            }
 
+            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.GetType()).ToArray();
+            
             var list = new List<object>();
             if (1 == parameterTypes.Length && parameterTypes[0] == typeof(DataSet))
             {
@@ -104,17 +104,10 @@
             }
             else
             {
-#if NET20
-                if (IEnumerableExtensionMethods.Count(Locations) != parameterTypes.Length)
-                {
-                    throw new InvalidOperationException(StringExtensionMethods.FormatWith(Resources.CountsDiffer, IEnumerableExtensionMethods.Count(Locations), parameterTypes.Length));
-                }
-#else
                 if (Locations.Count() != parameterTypes.Length)
                 {
                     throw new InvalidOperationException(Resources.CountsDiffer.FormatWith(Locations.Count(), parameterTypes.Length));
                 }
-#endif
 
                 var index = -1;
                 foreach (var location in Locations)

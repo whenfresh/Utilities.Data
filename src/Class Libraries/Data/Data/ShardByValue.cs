@@ -1,8 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using System;
-    using Cavity.Collections;
-
     public sealed class ShardByValue : IIdentifyShard
     {
         public ShardByValue(string column)

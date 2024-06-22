@@ -1,0 +1,16 @@
+<Project>
+<!--    language -->
+    <PropertyGroup>
+        <ImplicitUsings>true</ImplicitUsings>
+        <LangVersion>latestmajor</LangVersion>
+        <AssemblyName>WhenFresh.Utilities.$(MSBuildProjectName)</AssemblyName>
+        <AssemblyTitle>WhenFresh.Utilities.$(MSBuildProjectName).dll</AssemblyTitle>
+        <RootNamespace>WhenFresh.Utilities.$(MSBuildProjectName)</RootNamespace>
+    </PropertyGroup>
+<!--    nuget-->
+    <PropertyGroup>
+        <Authors>Alan Dean, Sebastien Lambla</Authors>
+        <Company>WhenFresh</Company>
+        <RepositoryUrl>https://github.com/whenfresh/WhenFresh.$(MSBuildSolutionName)</RepositoryUrl>
+    </PropertyGroup>
+</Project>

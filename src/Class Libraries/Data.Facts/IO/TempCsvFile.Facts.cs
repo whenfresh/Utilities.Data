@@ -1,11 +1,7 @@
-﻿namespace Cavity.IO
+﻿namespace WhenFresh.Utilities.Data.Facts.IO
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Cavity.Collections;
-    using Cavity.Data;
-    using Xunit;
+    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.Data.IO;
 
     public sealed class TempCsvFileFacts
     {

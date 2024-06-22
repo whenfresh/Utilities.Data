@@ -1,9 +1,7 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
-    using Cavity.Collections;
 
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This naming is intentional.")]
     [Serializable]

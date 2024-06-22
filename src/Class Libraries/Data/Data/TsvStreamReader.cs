@@ -1,15 +1,10 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-#if !NET20
     using System.Linq;
+    using WhenFresh.Utilities.Data.Properties;
+#if !NET20
 #endif
-    using Cavity.Collections;
-    using Cavity.Properties;
 
     public class TsvStreamReader : StreamReader
     {

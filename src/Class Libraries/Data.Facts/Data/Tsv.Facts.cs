@@ -1,14 +1,9 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Data;
     using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using Cavity.Collections;
-    using Cavity.IO;
-    using Xunit;
+    using WhenFresh.Utilities.Core.Data;
+    using WhenFresh.Utilities.Core.IO;
 
     public sealed class TsvFacts
     {

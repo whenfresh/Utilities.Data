@@ -1,9 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using Xunit;
-    using Xunit.Extensions;
-
     public sealed class CsvStringExtensionMethodsFacts
     {
         [Fact]

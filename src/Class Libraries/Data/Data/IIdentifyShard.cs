@@ -1,7 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using Cavity.Collections;
-
     public interface IIdentifyShard
     {
         string IdentifyShard(KeyStringDictionary entry);

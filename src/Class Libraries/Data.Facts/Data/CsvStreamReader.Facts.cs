@@ -1,11 +1,5 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Facts.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Cavity.Collections;
-    using Xunit;
-
     public sealed class CsvStreamReaderFacts
     {
         [Fact]

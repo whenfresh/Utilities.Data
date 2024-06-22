@@ -1,13 +1,8 @@
-﻿namespace Cavity.Data
+﻿namespace WhenFresh.Utilities.Data.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
     using System.Text;
-    using Cavity.Collections;
-    using Cavity.Properties;
+    using WhenFresh.Utilities.Data.Properties;
 
     public class CsvStreamReader : StreamReader
     {
