@@ -86,7 +86,7 @@
             }
 
 
-            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.GetType()).ToArray();
+            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
             
             var list = new List<object>();
             if (1 == parameterTypes.Length && parameterTypes[0] == typeof(DataSet))

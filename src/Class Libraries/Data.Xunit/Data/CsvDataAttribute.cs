@@ -42,7 +42,7 @@
 
         public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
         {
-            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.GetType()).ToArray();
+            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
 
             if (null == methodUnderTest)
             {
@@ -70,17 +70,10 @@
             }
             else
             {
-#if NET20
-                if (IEnumerableExtensionMethods.Count(Files) != parameterTypes.Length)
-                {
-                    throw new InvalidOperationException(StringExtensionMethods.FormatWith(Resources.CountsDiffer, IEnumerableExtensionMethods.Count(Files), parameterTypes.Length));
-                }
-#else
                 if (Files.Count() != parameterTypes.Length)
                 {
                     throw new InvalidOperationException(Resources.CountsDiffer.FormatWith(Files.Count(), parameterTypes.Length));
                 }
-#endif
 
                 var index = -1;
                 foreach (var file in Files)

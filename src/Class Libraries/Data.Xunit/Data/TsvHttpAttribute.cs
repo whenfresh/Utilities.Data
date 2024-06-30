@@ -81,7 +81,7 @@
         public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
         {
             
-            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.GetType()).ToArray();
+            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
 
             if (null == methodUnderTest)
             {
