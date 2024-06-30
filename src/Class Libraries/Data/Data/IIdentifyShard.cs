@@ -1,7 +1,6 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+public interface IIdentifyShard
 {
-    public interface IIdentifyShard
-    {
-        string IdentifyShard(KeyStringDictionary entry);
-    }
+    string IdentifyShard(KeyStringDictionary entry);
 }

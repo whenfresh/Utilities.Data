@@ -1,42 +1,39 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+using System.Collections.ObjectModel;
+
+[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is not a collection.")]
+public class DataShard : DataSheet
 {
-    using System.Collections.ObjectModel;
-
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is not a collection.")]
-    public class DataShard : DataSheet
+    public DataShard(string title)
+        : this()
     {
-        public DataShard(string title)
-            : this()
-        {
-            Title = title;
-        }
+        Title = title;
+    }
 
-        public DataShard()
-        {
-            Entries = new Collection<KeyStringDictionary>();
-        }
+    public DataShard()
+    {
+        Entries = new Collection<KeyStringDictionary>();
+    }
 
-        public ICollection<KeyStringDictionary> Entries { get; private set; }
+    public ICollection<KeyStringDictionary> Entries { get; }
 
-        protected override IEnumerator<T> GetEnumerator<T>()
+    protected override IEnumerator<T> GetEnumerator<T>()
+    {
+        var convert = typeof(T).FullName != typeof(KeyStringDictionary).FullName;
+        foreach (var entry in Entries)
         {
-            var convert = typeof(T).FullName != typeof(KeyStringDictionary).FullName;
-            foreach (var entry in Entries)
+            if (convert)
             {
-                if (convert)
-                {
-                    var instance = Activator.CreateInstance<T>();
-                    foreach (var pair in entry)
-                    {
-                        instance[pair.Key] = pair.Value;
-                    }
+                var instance = Activator.CreateInstance<T>();
+                foreach (var pair in entry)
+                    instance[pair.Key] = pair.Value;
 
-                    yield return instance;
-                    continue;
-                }
-
-                yield return (T)entry;
+                yield return instance;
+                continue;
             }
+
+            yield return (T)entry;
         }
     }
 }

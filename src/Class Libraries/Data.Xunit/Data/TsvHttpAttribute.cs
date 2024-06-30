@@ -1,146 +1,123 @@
-﻿namespace WhenFresh.Utilities.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Reflection;
-    using WhenFresh.Utilities;
-    using WhenFresh.Utilities.Collections;
-    using WhenFresh.Utilities.IO;
-    using WhenFresh.Utilities.Properties;
-    using Xunit.Sdk;
+﻿namespace WhenFresh.Utilities.Data;
+
+using System.Data;
+using System.Globalization;
+using System.Net;
+using System.Reflection;
+using WhenFresh.Utilities.Collections;
+using WhenFresh.Utilities.IO;
+using WhenFresh.Utilities.Properties;
+using Xunit.Sdk;
 #if !NET20
 #endif
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class TsvHttpAttribute : DataAttribute
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public sealed class TsvHttpAttribute : DataAttribute
+{
+    public TsvHttpAttribute(params string[] locations)
+        : this()
     {
-        public TsvHttpAttribute(params string[] locations)
-            : this()
+        if (null == locations)
+            throw new ArgumentNullException("locations");
+
+        if (0 == locations.Length)
+            throw new ArgumentOutOfRangeException("locations");
+
+        Locations = locations;
+    }
+
+    private TsvHttpAttribute()
+    {
+    }
+
+    public IEnumerable<string> Locations { get; }
+
+    public static TsvDataSheet Download(AbsoluteUri location)
+    {
+        if (null == location)
+            throw new ArgumentNullException("location");
+
+        TsvDataSheet tsv = null;
+
+        var request = WebRequest.Create((Uri)location);
+        using (var response = request.GetResponse())
         {
-            if (null == locations)
+            using (var stream = response.GetResponseStream())
             {
-                throw new ArgumentNullException("locations");
-            }
-
-            if (0 == locations.Length)
-            {
-                throw new ArgumentOutOfRangeException("locations");
-            }
-
-            Locations = locations;
-        }
-
-        private TsvHttpAttribute()
-        {
-        }
-
-        public IEnumerable<string> Locations { get; private set; }
-
-        public static TsvDataSheet Download(AbsoluteUri location)
-        {
-            if (null == location)
-            {
-                throw new ArgumentNullException("location");
-            }
-
-            TsvDataSheet tsv = null;
-
-            var request = WebRequest.Create((Uri)location);
-            using (var response = request.GetResponse())
-            {
-                using (var stream = response.GetResponseStream())
-                {
-                    if (null != stream)
+                if (null != stream)
+                    using (var reader = new StreamReader(stream))
                     {
-                        using (var reader = new StreamReader(stream))
-                        {
 #if NET20
                             var file = new FileInfo(StringExtensionMethods.FormatWith("{0}.tsv", AlphaDecimal.Random()));
                             FileInfoExtensionMethods.Create(file, reader.ReadToEnd());
 #else
-                            var file = new FileInfo("{0}.tsv".FormatWith(AlphaDecimal.Random()));
-                            file.Create(reader.ReadToEnd());
+                        var file = new FileInfo("{0}.tsv".FormatWith(AlphaDecimal.Random()));
+                        file.Create(reader.ReadToEnd());
 #endif
 
-                            tsv = new TsvDataSheet(file);
-                        }
+                        tsv = new TsvDataSheet(file);
                     }
-                }
             }
-
-            return tsv;
         }
 
-        public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
+        return tsv;
+    }
+
+    public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
+    {
+        var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
+
+        if (null == methodUnderTest)
+            throw new ArgumentNullException("methodUnderTest");
+
+        if (null == parameterTypes)
+            throw new ArgumentNullException("parameterTypes");
+
+        var list = new List<object>();
+        if (1 == parameterTypes.Length && parameterTypes[0] == typeof(DataSet))
         {
-            
-            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
+            var data = new DataSet
+                           {
+                               Locale = CultureInfo.InvariantCulture
+                           };
+            foreach (var location in Locations)
+                data.Tables.Add(Download(location).ToDataTable());
 
-            if (null == methodUnderTest)
-            {
-                throw new ArgumentNullException("methodUnderTest");
-            }
-
-            if (null == parameterTypes)
-            {
-                throw new ArgumentNullException("parameterTypes");
-            }
-
-            var list = new List<object>();
-            if (1 == parameterTypes.Length && parameterTypes[0] == typeof(DataSet))
-            {
-                var data = new DataSet
-                               {
-                                   Locale = CultureInfo.InvariantCulture
-                               };
-                foreach (var location in Locations)
-                {
-                    data.Tables.Add(Download(location).ToDataTable());
-                }
-
-                list.Add(data);
-            }
-            else
-            {
+            list.Add(data);
+        }
+        else
+        {
 #if NET20
                 if (IEnumerableExtensionMethods.Count(Locations) != parameterTypes.Length)
                 {
                     throw new InvalidOperationException(StringExtensionMethods.FormatWith(Resources.CountsDiffer, IEnumerableExtensionMethods.Count(Locations), parameterTypes.Length));
                 }
 #else
-                if (Locations.Count() != parameterTypes.Length)
-                {
-                    throw new InvalidOperationException(Resources.CountsDiffer.FormatWith(Locations.Count(), parameterTypes.Length));
-                }
+            if (Locations.Count() != parameterTypes.Length)
+                throw new InvalidOperationException(Resources.CountsDiffer.FormatWith(Locations.Count(), parameterTypes.Length));
 #endif
 
-                var index = -1;
-                foreach (var location in Locations)
+            var index = -1;
+            foreach (var location in Locations)
+            {
+                index++;
+                if (parameterTypes[index] == typeof(TsvDataSheet) ||
+                    parameterTypes[index] == typeof(IEnumerable<KeyStringDictionary>))
                 {
-                    index++;
-                    if (parameterTypes[index] == typeof(TsvDataSheet) ||
-                        parameterTypes[index] == typeof(IEnumerable<KeyStringDictionary>))
-                    {
-                        list.Add(Download(location));
-                        continue;
-                    }
-
-                    if (parameterTypes[index] == typeof(DataTable))
-                    {
-                        list.Add(Download(location).ToDataTable());
-                        continue;
-                    }
-
-                    throw new InvalidOperationException(Resources.UnsupportedParameterType);
+                    list.Add(Download(location));
+                    continue;
                 }
-            }
 
-            yield return list.ToArray();
+                if (parameterTypes[index] == typeof(DataTable))
+                {
+                    list.Add(Download(location).ToDataTable());
+                    continue;
+                }
+
+                throw new InvalidOperationException(Resources.UnsupportedParameterType);
+            }
         }
+
+        yield return list.ToArray();
     }
 }

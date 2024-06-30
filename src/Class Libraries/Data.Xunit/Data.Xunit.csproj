@@ -1,38 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>Cavity.Data.Xunit</AssemblyName>
-    <ProjectGuid>{D1216F26-1703-402D-AD8A-67865A16416A}</ProjectGuid>
-    <AssemblyTitle>Cavity.Data.Xunit.dll</AssemblyTitle>
-    <Description>Cavity : xUnit Data Library (Release)</Description>
-    <TargetFramework>net80</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="WhenFresh.Utilities.Core" Version="3.0.0-preview.17" />
-    <PackageReference Include="xunit.extensibility.core" Version="2.8.1" />
-  </ItemGroup>
+    <PropertyGroup>
+        <AssemblyName>Cavity.Data.Xunit</AssemblyName>
+        <ProjectGuid>{D1216F26-1703-402D-AD8A-67865A16416A}</ProjectGuid>
+        <AssemblyTitle>Cavity.Data.Xunit.dll</AssemblyTitle>
+        <Description>Cavity : xUnit Data Library (Release)</Description>
+        <TargetFramework>net80</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="WhenFresh.Utilities.Core" Version="3.0.0-preview.17"/>
+        <PackageReference Include="xunit.extensibility.core" Version="2.8.1"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+            <SubType>Designer</SubType>
+        </EmbeddedResource>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Content Include="Properties\CodeAnalysis.dictionary">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Content Include="Properties\CodeAnalysis.dictionary">
+            <SubType>Designer</SubType>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Microsoft.CSharp"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Data\Data.csproj"/>
+    </ItemGroup>
 </Project>

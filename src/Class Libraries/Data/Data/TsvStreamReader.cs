@@ -1,153 +1,135 @@
-﻿namespace WhenFresh.Utilities.Data
-{
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using WhenFresh.Utilities.Properties;
+﻿namespace WhenFresh.Utilities.Data;
+
+using System.Collections.ObjectModel;
+using WhenFresh.Utilities.Properties;
 #if !NET20
 #endif
 
-    public class TsvStreamReader : StreamReader
+public class TsvStreamReader : StreamReader
+{
+    public TsvStreamReader(Stream stream)
+        : base(stream)
     {
-        public TsvStreamReader(Stream stream)
-            : base(stream)
+    }
+
+    public TsvStreamReader(Stream stream,
+                           string header)
+        : this(stream, ParseHeader(header))
+    {
+        Header = header;
+    }
+
+    public TsvStreamReader(Stream stream,
+                           IEnumerable<string> columns)
+        : base(stream)
+    {
+        if (null == columns)
+            throw new ArgumentNullException("columns");
+
+        Columns = new Collection<string>();
+        foreach (var header in columns)
         {
+            Columns.Add(header);
+            Header += (string.IsNullOrEmpty(Header) ? string.Empty : "\t") + header;
         }
 
-        public TsvStreamReader(Stream stream,
-                               string header)
-            : this(stream, ParseHeader(header))
-        {
-            Header = header;
-        }
+        if (0 == Columns.Count)
+            throw new ArgumentOutOfRangeException("columns");
+    }
 
-        public TsvStreamReader(Stream stream,
-                               IEnumerable<string> columns)
-            : base(stream)
-        {
-            if (null == columns)
-            {
-                throw new ArgumentNullException("columns");
-            }
+    public int EntryNumber { get; protected set; }
 
+    public string Header { get; protected set; }
+
+    public string Line { get; protected set; }
+
+    public int LineNumber { get; protected set; }
+
+    protected Collection<string> Columns { get; private set; }
+
+    public virtual KeyStringDictionary ReadEntry()
+    {
+        return ReadEntry<KeyStringDictionary>();
+    }
+
+    [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "A non-generic version is available.")]
+    public virtual KeyStringDictionary ReadEntry<T>()
+        where T : KeyStringDictionary, new()
+    {
+        var result = Activator.CreateInstance<T>();
+
+        if (null == Columns)
+        {
             Columns = new Collection<string>();
-            foreach (var header in columns)
-            {
-                Columns.Add(header);
-                Header += (string.IsNullOrEmpty(Header) ? string.Empty : "\t") + header;
-            }
+            foreach (var heading in NextLine())
+                Columns.Add(heading);
 
-            if (0 == Columns.Count)
-            {
-                throw new ArgumentOutOfRangeException("columns");
-            }
+            Header = Line;
         }
 
-        public int EntryNumber { get; protected set; }
+        var entry = NextLine();
+        if (null == entry)
+            return null;
 
-        public string Header { get; protected set; }
-
-        public string Line { get; protected set; }
-
-        public int LineNumber { get; protected set; }
-
-        protected Collection<string> Columns { get; private set; }
-
-        public virtual KeyStringDictionary ReadEntry()
+        if (0 != entry.Count)
         {
-            return ReadEntry<KeyStringDictionary>();
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "A non-generic version is available.")]
-        public virtual KeyStringDictionary ReadEntry<T>()
-            where T : KeyStringDictionary, new()
-        {
-            var result = Activator.CreateInstance<T>();
-
-            if (null == Columns)
+            EntryNumber++;
+            if (Columns.Count != entry.Count)
             {
-                Columns = new Collection<string>();
-                foreach (var heading in NextLine())
-                {
-                    Columns.Add(heading);
-                }
-
-                Header = Line;
-            }
-
-            var entry = NextLine();
-            if (null == entry)
-            {
-                return null;
-            }
-
-            if (0 != entry.Count)
-            {
-                EntryNumber++;
-                if (Columns.Count != entry.Count)
-                {
 #if NET20
                     throw new FormatException(StringExtensionMethods.FormatWith(Resources.ReadEntry_FormatException, LineNumber));
 #else
-                    throw new FormatException(Resources.ReadEntry_FormatException.FormatWith(LineNumber));
+                throw new FormatException(Resources.ReadEntry_FormatException.FormatWith(LineNumber));
 #endif
-                }
-
-                for (var i = 0; i < Columns.Count; i++)
-                {
-                    result.Add(Columns[i], entry[i]);
-                }
             }
 
-            return result;
+            for (var i = 0; i < Columns.Count; i++)
+                result.Add(Columns[i], entry[i]);
         }
 
-        protected virtual IList<string> NextLine()
-        {
-            Line = null;
-            while (!EndOfStream)
-            {
-                Line = ReadLine();
-                LineNumber++;
-                if (!string.IsNullOrEmpty(Line))
-                {
-                    break;
-                }
-            }
+        return result;
+    }
 
-            return string.IsNullOrEmpty(Line)
-                       ? null
+    protected virtual IList<string> NextLine()
+    {
+        Line = null;
+        while (!EndOfStream)
+        {
+            Line = ReadLine();
+            LineNumber++;
+            if (!string.IsNullOrEmpty(Line))
+                break;
+        }
+
+        return string.IsNullOrEmpty(Line)
+                   ? null
 #if NET20
                        : IEnumerableExtensionMethods.ToList(Line.Split('\t'));
 #else
-                       : Line.Split('\t').ToList();
+                   : Line.Split('\t').ToList();
 #endif
-        }
+    }
 
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "This is an odd rule that seems to be impossible to actually pass.")]
-        private static IEnumerable<string> ParseHeader(string header)
+    [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "This is an odd rule that seems to be impossible to actually pass.")]
+    private static IEnumerable<string> ParseHeader(string header)
+    {
+        if (null == header)
+            throw new ArgumentNullException("header");
+
+        if (0 == header.Length)
+            throw new ArgumentOutOfRangeException("header");
+
+        using (var stream = new MemoryStream())
         {
-            if (null == header)
+            using (var writer = new StreamWriter(stream))
             {
-                throw new ArgumentNullException("header");
-            }
-
-            if (0 == header.Length)
-            {
-                throw new ArgumentOutOfRangeException("header");
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                using (var writer = new StreamWriter(stream))
+                writer.WriteLine(header);
+                writer.Flush();
+                stream.Position = 0;
+                using (var reader = new TsvStreamReader(stream))
                 {
-                    writer.WriteLine(header);
-                    writer.Flush();
-                    stream.Position = 0;
-                    using (var reader = new TsvStreamReader(stream))
-                    {
-                        reader.ReadEntry();
-                        return reader.Columns;
-                    }
+                    reader.ReadEntry();
+                    return reader.Columns;
                 }
             }
         }

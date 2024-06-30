@@ -1,88 +1,87 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+public sealed class ShardByValueFacts
 {
-    public sealed class ShardByValueFacts
+    [Fact]
+    public void a_definition()
     {
-        [Fact]
-        public void a_definition()
-        {
-            Assert.True(new TypeExpectations<ShardByValue>()
-                            .DerivesFrom<object>()
-                            .IsConcreteClass()
-                            .IsSealed()
-                            .NoDefaultConstructor()
-                            .IsNotDecorated()
-                            .Implements<IIdentifyShard>()
-                            .Result);
-        }
+        Assert.True(new TypeExpectations<ShardByValue>()
+                    .DerivesFrom<object>()
+                    .IsConcreteClass()
+                    .IsSealed()
+                    .NoDefaultConstructor()
+                    .IsNotDecorated()
+                    .Implements<IIdentifyShard>()
+                    .Result);
+    }
 
-        [Fact]
-        public void ctor_string()
-        {
-            Assert.NotNull(new ShardByValue("example"));
-        }
+    [Fact]
+    public void ctor_string()
+    {
+        Assert.NotNull(new ShardByValue("example"));
+    }
 
-        [Theory]
-        [InlineData("")]
-        [InlineData("   ")]
-        public void ctor_stringEmpty(string value)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ShardByValue(value));
-        }
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void ctor_stringEmpty(string value)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new ShardByValue(value));
+    }
 
-        [Fact]
-        public void ctor_stringNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ShardByValue(null));
-        }
+    [Fact]
+    public void ctor_stringNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => new ShardByValue(null));
+    }
 
-        [Theory]
-        [InlineData("", null)]
-        [InlineData("", "")]
-        [InlineData("", "   ")]
-        [InlineData("value", "value")]
-        [InlineData("value", " value ")]
-        public void op_IdentifyShard_KeyStringDictionary(string expected,
-                                                         string value)
-        {
-            var obj = new ShardByValue("example");
-            var entry = new KeyStringDictionary
-                            {
-                                { "example", value }
-                            };
+    [Theory]
+    [InlineData("", null)]
+    [InlineData("", "")]
+    [InlineData("", "   ")]
+    [InlineData("value", "value")]
+    [InlineData("value", " value ")]
+    public void op_IdentifyShard_KeyStringDictionary(string expected,
+                                                     string value)
+    {
+        var obj = new ShardByValue("example");
+        var entry = new KeyStringDictionary
+                        {
+                            { "example", value }
+                        };
 
-            var actual = obj.IdentifyShard(entry);
+        var actual = obj.IdentifyShard(entry);
 
-            Assert.Equal(expected, actual);
-        }
+        Assert.Equal(expected, actual);
+    }
 
-        [Fact]
-        public void op_IdentifyShard_KeyStringDictionaryNull()
-        {
-            var obj = new ShardByValue("example");
+    [Fact]
+    public void op_IdentifyShard_KeyStringDictionaryNull()
+    {
+        var obj = new ShardByValue("example");
 
-            Assert.Throws<ArgumentNullException>(() => obj.IdentifyShard(null));
-        }
+        Assert.Throws<ArgumentNullException>(() => obj.IdentifyShard(null));
+    }
 
-        [Fact]
-        public void op_IdentifyShard_KeyStringDictionary_whenColumnMissing()
-        {
-            const string expected = "value";
-            var obj = new ShardByValue("foo");
-            var entry = new KeyStringDictionary
-                            {
-                                { "bar", expected }
-                            };
+    [Fact]
+    public void op_IdentifyShard_KeyStringDictionary_whenColumnMissing()
+    {
+        const string expected = "value";
+        var obj = new ShardByValue("foo");
+        var entry = new KeyStringDictionary
+                        {
+                            { "bar", expected }
+                        };
 
-            Assert.Throws<KeyNotFoundException>(() => obj.IdentifyShard(entry));
-        }
+        Assert.Throws<KeyNotFoundException>(() => obj.IdentifyShard(entry));
+    }
 
-        [Fact]
-        public void prop_Column()
-        {
-            Assert.True(new PropertyExpectations<ShardByValue>(x => x.Column)
-                            .TypeIs<string>()
-                            .IsNotDecorated()
-                            .Result);
-        }
+    [Fact]
+    public void prop_Column()
+    {
+        Assert.True(new PropertyExpectations<ShardByValue>(x => x.Column)
+                    .TypeIs<string>()
+                    .IsNotDecorated()
+                    .Result);
     }
 }

@@ -1,128 +1,126 @@
-﻿namespace WhenFresh.Utilities.IO
+﻿namespace WhenFresh.Utilities.IO;
+
+using System.Diagnostics;
+using WhenFresh.Utilities.Data;
+
+public sealed class DataFileCreationFacts
 {
-    using System.Diagnostics;
-    using WhenFresh.Utilities.IO;
-    using WhenFresh.Utilities.Data;
-
-    public sealed class DataFileCreationFacts
+    [Fact]
+    public void a_definition()
     {
-        [Fact]
-        public void a_definition()
+        Assert.True(new TypeExpectations<DataFileCreation>()
+                    .DerivesFrom<object>()
+                    .IsConcreteClass()
+                    .IsUnsealed()
+                    .NoDefaultConstructor()
+                    .IsNotDecorated()
+                    .Result);
+    }
+
+    [Fact]
+    public void ctor_FileInfoNull_DateTime()
+    {
+        Assert.Throws<ArgumentNullException>(() => new DataFileCreation(null, DateTime.UtcNow));
+    }
+
+    [Fact]
+    public void ctor_FileInfo_DateTime()
+    {
+        using (var temp = new TempDirectory())
         {
-            Assert.True(new TypeExpectations<DataFileCreation>()
-                            .DerivesFrom<object>()
-                            .IsConcreteClass()
-                            .IsUnsealed()
-                            .NoDefaultConstructor()
-                            .IsNotDecorated()
-                            .Result);
-        }
+            var destination = temp.Info.ToFile("destination");
+            var modified = DateTime.UtcNow;
 
-        [Fact]
-        public void ctor_FileInfoNull_DateTime()
+            var obj = new DataFileCreation(destination, modified);
+
+            Assert.Equal(destination, obj.Destination);
+            Assert.Equal(modified, obj.Modified);
+        }
+    }
+
+    [Fact]
+    public void op_Create_IEnumerableOfKeyStringDictionary()
+    {
+        using (var temp = new TempDirectory())
         {
-            Assert.Throws<ArgumentNullException>(() => new DataFileCreation(null, DateTime.UtcNow));
-        }
+            var destination = temp.Info.ToFile("destination");
+            var modified = DateTime.UtcNow;
+            var data = new List<KeyStringDictionary>
+                           {
+                               new()
+                                   {
+                                       { "VALUE", "123" }
+                                   }
+                           };
 
-        [Fact]
-        public void ctor_FileInfo_DateTime()
+            var obj = new DataFileCreation(destination, modified);
+            var count = obj.Create(data);
+
+            Assert.True(temp.Info.ToFile("destination").Exists);
+            Assert.Equal(1, count);
+            Assert.Equal(count, obj.Count);
+            Assert.Equal("123", new CsvDataSheet(destination).First()["VALUE"]);
+        }
+    }
+
+    [Fact]
+    public void op_Create_IEnumerableOfKeyStringDictionaryNull()
+    {
+        using (var temp = new TempDirectory())
         {
-            using (var temp = new TempDirectory())
-            {
-                var destination = temp.Info.ToFile("destination");
-                var modified = DateTime.UtcNow;
+            var destination = temp.Info.ToFile("destination");
+            var modified = DateTime.UtcNow;
 
-                var obj = new DataFileCreation(destination, modified);
-
-                Assert.Equal(destination, obj.Destination);
-                Assert.Equal(modified, obj.Modified);
-            }
+            Assert.Throws<ArgumentNullException>(() => new DataFileCreation(destination, modified).Create(null));
         }
+    }
 
-        [Fact]
-        public void op_Create_IEnumerableOfKeyStringDictionary()
+    [Fact]
+    public void op_Create_IEnumerableOfKeyStringDictionary_whenDestinationExists()
+    {
+        using (var temp = new TempDirectory())
         {
-            using (var temp = new TempDirectory())
-            {
-                var destination = temp.Info.ToFile("destination");
-                var modified = DateTime.UtcNow;
-                var data = new List<KeyStringDictionary>
-                               {
-                                   new KeyStringDictionary
-                                       {
-                                           { "VALUE", "123" }
-                                       }
-                               };
+            var destination = temp.Info.ToFile("destination").Create("test");
+            var modified = DateTime.UtcNow;
+            var data = new List<KeyStringDictionary>();
 
-                var obj = new DataFileCreation(destination, modified);
-                var count = obj.Create(data);
-
-                Assert.True(temp.Info.ToFile("destination").Exists);
-                Assert.Equal(1, count);
-                Assert.Equal(count, obj.Count);
-                Assert.Equal("123", new CsvDataSheet(destination).First()["VALUE"]);
-            }
+            Assert.Throws<IOException>(() => new DataFileCreation(destination, modified).Create(data));
         }
+    }
 
-        [Fact]
-        public void op_Create_IEnumerableOfKeyStringDictionaryNull()
-        {
-            using (var temp = new TempDirectory())
-            {
-                var destination = temp.Info.ToFile("destination");
-                var modified = DateTime.UtcNow;
+    [Fact]
+    public void prop_Count()
+    {
+        Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Count)
+                    .IsNotDecorated()
+                    .TypeIs<int>()
+                    .Result);
+    }
 
-                Assert.Throws<ArgumentNullException>(() => new DataFileCreation(destination, modified).Create(null));
-            }
-        }
+    [Fact]
+    public void prop_Destination()
+    {
+        Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Destination)
+                    .IsNotDecorated()
+                    .TypeIs<FileInfo>()
+                    .Result);
+    }
 
-        [Fact]
-        public void op_Create_IEnumerableOfKeyStringDictionary_whenDestinationExists()
-        {
-            using (var temp = new TempDirectory())
-            {
-                var destination = temp.Info.ToFile("destination").Create("test");
-                var modified = DateTime.UtcNow;
-                var data = new List<KeyStringDictionary>();
+    [Fact]
+    public void prop_Modified()
+    {
+        Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Modified)
+                    .IsNotDecorated()
+                    .TypeIs<DateTime>()
+                    .Result);
+    }
 
-                Assert.Throws<IOException>(() => new DataFileCreation(destination, modified).Create(data));
-            }
-        }
-
-        [Fact]
-        public void prop_Count()
-        {
-            Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Count)
-                            .IsNotDecorated()
-                            .TypeIs<int>()
-                            .Result);
-        }
-
-        [Fact]
-        public void prop_Destination()
-        {
-            Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Destination)
-                            .IsNotDecorated()
-                            .TypeIs<FileInfo>()
-                            .Result);
-        }
-
-        [Fact]
-        public void prop_Modified()
-        {
-            Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Modified)
-                            .IsNotDecorated()
-                            .TypeIs<DateTime>()
-                            .Result);
-        }
-
-        [Fact]
-        public void prop_Stopwatch()
-        {
-            Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Stopwatch)
-                            .IsNotDecorated()
-                            .TypeIs<Stopwatch>()
-                            .Result);
-        }
+    [Fact]
+    public void prop_Stopwatch()
+    {
+        Assert.True(new PropertyExpectations<DataFileCreation>(x => x.Stopwatch)
+                    .IsNotDecorated()
+                    .TypeIs<Stopwatch>()
+                    .Result);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+public interface ITransformData<T>
 {
-    public interface ITransformData<T>
-    {
-        IEnumerable<T> Transform(IEnumerable<KeyStringDictionary> data);
-    }
+    IEnumerable<T> Transform(IEnumerable<KeyStringDictionary> data);
 }

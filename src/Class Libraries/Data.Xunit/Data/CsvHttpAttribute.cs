@@ -1,134 +1,113 @@
-﻿namespace WhenFresh.Utilities.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Reflection;
-    using WhenFresh.Utilities;
-    using WhenFresh.Utilities.Collections;
-    using WhenFresh.Utilities.IO;
-    using WhenFresh.Utilities.Properties;
-    using Xunit.Sdk;
+﻿namespace WhenFresh.Utilities.Data;
+
+using System.Data;
+using System.Globalization;
+using System.Net;
+using System.Reflection;
+using WhenFresh.Utilities.Collections;
+using WhenFresh.Utilities.IO;
+using WhenFresh.Utilities.Properties;
+using Xunit.Sdk;
 #if !NET20
 #endif
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class CsvHttpAttribute : DataAttribute
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public sealed class CsvHttpAttribute : DataAttribute
+{
+    public CsvHttpAttribute(params string[] locations)
+        : this()
     {
-        public CsvHttpAttribute(params string[] locations)
-            : this()
+        if (null == locations)
+            throw new ArgumentNullException("locations");
+
+        if (0 == locations.Length)
+            throw new ArgumentOutOfRangeException("locations");
+
+        Locations = locations;
+    }
+
+    private CsvHttpAttribute()
+    {
+    }
+
+    public IEnumerable<string> Locations { get; }
+
+    public static CsvDataSheet Download(AbsoluteUri location)
+    {
+        if (null == location)
+            throw new ArgumentNullException("location");
+
+        CsvDataSheet csv = null;
+
+        var request = WebRequest.Create((Uri)location);
+        using (var response = request.GetResponse())
         {
-            if (null == locations)
+            using (var stream = response.GetResponseStream())
             {
-                throw new ArgumentNullException("locations");
-            }
-
-            if (0 == locations.Length)
-            {
-                throw new ArgumentOutOfRangeException("locations");
-            }
-
-            Locations = locations;
-        }
-
-        private CsvHttpAttribute()
-        {
-        }
-
-        public IEnumerable<string> Locations { get; private set; }
-
-        public static CsvDataSheet Download(AbsoluteUri location)
-        {
-            if (null == location)
-            {
-                throw new ArgumentNullException("location");
-            }
-
-            CsvDataSheet csv = null;
-
-            var request = WebRequest.Create((Uri)location);
-            using (var response = request.GetResponse())
-            {
-                using (var stream = response.GetResponseStream())
-                {
-                    if (null != stream)
+                if (null != stream)
+                    using (var reader = new StreamReader(stream))
                     {
-                        using (var reader = new StreamReader(stream))
-                        {
 #if NET20
                             var file = new FileInfo(StringExtensionMethods.FormatWith("{0}.csv", AlphaDecimal.Random()));
                             FileInfoExtensionMethods.Create(file, reader.ReadToEnd());
 #else
-                            var file = new FileInfo("{0}.csv".FormatWith(AlphaDecimal.Random()));
-                            file.Create(reader.ReadToEnd());
+                        var file = new FileInfo("{0}.csv".FormatWith(AlphaDecimal.Random()));
+                        file.Create(reader.ReadToEnd());
 #endif
 
-                            csv = new CsvDataSheet(file);
-                        }
+                        csv = new CsvDataSheet(file);
                     }
-                }
             }
-
-            return csv;
         }
 
-        public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
+        return csv;
+    }
+
+    public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest)
+    {
+        if (null == methodUnderTest)
+            throw new ArgumentNullException("methodUnderTest");
+
+        var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
+
+        var list = new List<object>();
+        if (1 == parameterTypes.Length && parameterTypes[0] == typeof(DataSet))
         {
-            if (null == methodUnderTest)
-            {
-                throw new ArgumentNullException("methodUnderTest");
-            }
+            var data = new DataSet
+                           {
+                               Locale = CultureInfo.InvariantCulture
+                           };
+            foreach (var location in Locations)
+                data.Tables.Add(Download(location).ToDataTable());
 
-
-            var parameterTypes = methodUnderTest.GetParameters().Select(p => p.ParameterType).ToArray();
-            
-            var list = new List<object>();
-            if (1 == parameterTypes.Length && parameterTypes[0] == typeof(DataSet))
-            {
-                var data = new DataSet
-                               {
-                                   Locale = CultureInfo.InvariantCulture
-                               };
-                foreach (var location in Locations)
-                {
-                    data.Tables.Add(Download(location).ToDataTable());
-                }
-
-                list.Add(data);
-            }
-            else
-            {
-                if (Locations.Count() != parameterTypes.Length)
-                {
-                    throw new InvalidOperationException(Resources.CountsDiffer.FormatWith(Locations.Count(), parameterTypes.Length));
-                }
-
-                var index = -1;
-                foreach (var location in Locations)
-                {
-                    index++;
-                    if (parameterTypes[index] == typeof(CsvDataSheet) ||
-                        parameterTypes[index] == typeof(IEnumerable<KeyStringDictionary>))
-                    {
-                        list.Add(Download(location));
-                        continue;
-                    }
-
-                    if (parameterTypes[index] == typeof(DataTable))
-                    {
-                        list.Add(Download(location).ToDataTable());
-                        continue;
-                    }
-
-                    throw new InvalidOperationException(Resources.UnsupportedParameterType);
-                }
-            }
-
-            yield return list.ToArray();
+            list.Add(data);
         }
+        else
+        {
+            if (Locations.Count() != parameterTypes.Length)
+                throw new InvalidOperationException(Resources.CountsDiffer.FormatWith(Locations.Count(), parameterTypes.Length));
+
+            var index = -1;
+            foreach (var location in Locations)
+            {
+                index++;
+                if (parameterTypes[index] == typeof(CsvDataSheet) ||
+                    parameterTypes[index] == typeof(IEnumerable<KeyStringDictionary>))
+                {
+                    list.Add(Download(location));
+                    continue;
+                }
+
+                if (parameterTypes[index] == typeof(DataTable))
+                {
+                    list.Add(Download(location).ToDataTable());
+                    continue;
+                }
+
+                throw new InvalidOperationException(Resources.UnsupportedParameterType);
+            }
+        }
+
+        yield return list.ToArray();
     }
 }

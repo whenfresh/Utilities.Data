@@ -1,137 +1,126 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+using System.Collections.ObjectModel;
+using System.Text;
+
+public class JaggedCsvReader : StreamReader
 {
-    using System.Collections.ObjectModel;
-    using System.Text;
-
-    public class JaggedCsvReader : StreamReader
+    public JaggedCsvReader(Stream stream)
+        : base(stream)
     {
-        public JaggedCsvReader(Stream stream)
-            : base(stream)
+    }
+
+    public Collection<string> Columns { get; private set; }
+
+    public int EntryNumber { get; private set; }
+
+    public string Line { get; private set; }
+
+    public int LineNumber { get; private set; }
+
+    public IList<string> ReadEntry()
+    {
+        if (null == Columns)
         {
+            Columns = new Collection<string>();
+            foreach (var heading in NextLine())
+                Columns.Add(heading);
         }
 
-        public Collection<string> Columns { get; private set; }
+        var entry = NextLine();
+        if (null == entry)
+            return null;
 
-        public int EntryNumber { get; private set; }
+        EntryNumber++;
+        return entry;
+    }
 
-        public string Line { get; private set; }
-
-        public int LineNumber { get; private set; }
-
-        public IList<string> ReadEntry()
+    private IList<string> NextLine()
+    {
+        Line = null;
+        while (!EndOfStream)
         {
-            if (null == Columns)
-            {
-                Columns = new Collection<string>();
-                foreach (var heading in NextLine())
-                {
-                    Columns.Add(heading);
-                }
-            }
-
-            var entry = NextLine();
-            if (null == entry)
-            {
-                return null;
-            }
-
-            EntryNumber++;
-            return entry;
+            Line = ReadLine();
+            LineNumber++;
+            if (!string.IsNullOrEmpty(Line))
+                break;
         }
 
-        private IList<string> NextLine()
+        return Parse(Line);
+    }
+
+    private IList<string> Parse(string line)
+    {
+        if (string.IsNullOrEmpty(line))
+            return null;
+
+        IList<string> result = new List<string>();
+
+        var trim = true;
+        var buffer = new StringBuilder();
+        var quote = false;
+        for (var i = 0; i < line.Length; i++)
         {
-            Line = null;
-            while (!EndOfStream)
+            var c = line[i];
+            switch (c)
             {
-                Line = ReadLine();
-                LineNumber++;
-                if (!string.IsNullOrEmpty(Line))
-                {
-                    break;
-                }
-            }
-
-            return Parse(Line);
-        }
-
-        private IList<string> Parse(string line)
-        {
-            if (string.IsNullOrEmpty(line))
-            {
-                return null;
-            }
-
-            IList<string> result = new List<string>();
-
-            var trim = true;
-            var buffer = new StringBuilder();
-            var quote = false;
-            for (var i = 0; i < line.Length; i++)
-            {
-                var c = line[i];
-                switch (c)
-                {
-                    case ',':
-                        if (quote)
-                        {
-                            buffer.Append(c);
-                            break;
-                        }
-
-                        result.Add(trim ? buffer.ToString().Trim() : buffer.ToString());
-                        buffer.Remove(0, buffer.Length);
-                        trim = true;
+                case ',':
+                    if (quote)
+                    {
+                        buffer.Append(c);
                         break;
+                    }
 
-                    case '"':
-                        trim = false;
-                        if (quote)
+                    result.Add(trim ? buffer.ToString().Trim() : buffer.ToString());
+                    buffer.Remove(0, buffer.Length);
+                    trim = true;
+                    break;
+
+                case '"':
+                    trim = false;
+                    if (quote)
+                    {
+                        if (i == line.Length - 1)
                         {
-                            if (i == line.Length - 1)
-                            {
-                                quote = false;
-                                break;
-                            }
-
-                            if ('"' == line[i + 1])
-                            {
-                                buffer.Append(c);
-                                i++;
-                                break;
-                            }
-
                             quote = false;
                             break;
                         }
 
-                        if (0 == buffer.Length)
+                        if ('"' == line[i + 1])
                         {
-                            quote = true;
+                            buffer.Append(c);
+                            i++;
+                            break;
                         }
 
+                        quote = false;
                         break;
+                    }
 
-                    default:
-                        buffer.Append(c);
-                        break;
-                }
+                    if (0 == buffer.Length)
+                        quote = true;
+
+                    break;
+
+                default:
+                    buffer.Append(c);
+                    break;
             }
+        }
 
-            if (quote)
-            {
+        if (quote)
+        {
 #if NET20
                 Line = StringExtensionMethods.Append(line, Environment.NewLine, ReadLine());
 #else
-                Line = line.Append(Environment.NewLine, ReadLine());
+            Line = line.Append(Environment.NewLine, ReadLine());
 #endif
-                LineNumber++;
-                return Parse(Line);
-            }
-
-            result.Add(trim ? buffer.ToString().Trim() : buffer.ToString());
-
-            return result;
+            LineNumber++;
+            return Parse(Line);
         }
+
+        result.Add(trim ? buffer.ToString().Trim() : buffer.ToString());
+
+        return result;
     }
 }

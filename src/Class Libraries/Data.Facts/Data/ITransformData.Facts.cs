@@ -1,35 +1,34 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+using Moq;
+
+public sealed class ITransformDataFacts
 {
-    using Moq;
-
-    public sealed class ITransformDataFacts
+    [Fact]
+    public void a_definition()
     {
-        [Fact]
-        public void a_definition()
-        {
-            Assert.True(new TypeExpectations<ITransformData>()
-                            .IsInterface()
-                            .IsNotDecorated()
-                            .Result);
-        }
+        Assert.True(new TypeExpectations<ITransformData>()
+                    .IsInterface()
+                    .IsNotDecorated()
+                    .Result);
+    }
 
-        [Fact]
-        public void op_Transform_IEnumerableOfKeyStringDictionary()
-        {
-            var data = new Mock<IEnumerable<KeyStringDictionary>>().Object;
-            var expected = new Mock<IEnumerable<KeyStringDictionary>>().Object;
+    [Fact]
+    public void op_Transform_IEnumerableOfKeyStringDictionary()
+    {
+        var data = new Mock<IEnumerable<KeyStringDictionary>>().Object;
+        var expected = new Mock<IEnumerable<KeyStringDictionary>>().Object;
 
-            var mock = new Mock<ITransformData>();
-            mock
-                .Setup(x => x.Transform(data))
-                .Returns(expected)
-                .Verifiable();
+        var mock = new Mock<ITransformData>();
+        mock
+            .Setup(x => x.Transform(data))
+            .Returns(expected)
+            .Verifiable();
 
-            var actual = mock.Object.Transform(data);
+        var actual = mock.Object.Transform(data);
 
-            Assert.Same(expected, actual);
+        Assert.Same(expected, actual);
 
-            mock.VerifyAll();
-        }
+        mock.VerifyAll();
     }
 }

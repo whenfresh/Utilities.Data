@@ -1,134 +1,129 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+using WhenFresh.Utilities.Testing.Unit;
+using Xunit.Sdk;
+
+public sealed class TsvDataAttributeFacts
 {
-    using WhenFresh.Utilities.Testing.Unit;
-    using Xunit.Sdk;
-
-    public sealed class TsvDataAttributeFacts
+    [Fact]
+    public void a_definition()
     {
-        [Fact]
-        public void a_definition()
-        {
-            Assert.True(new TypeExpectations<TsvDataAttribute>()
-                            .DerivesFrom<DataAttribute>()
-                            .IsConcreteClass()
-                            .IsSealed()
-                            .NoDefaultConstructor()
-                            .AttributeUsage(AttributeTargets.Method, true, true)
-                            .Result);
-        }
+        Assert.True(new TypeExpectations<TsvDataAttribute>()
+                    .DerivesFrom<DataAttribute>()
+                    .IsConcreteClass()
+                    .IsSealed()
+                    .NoDefaultConstructor()
+                    .AttributeUsage(AttributeTargets.Method, true, true)
+                    .Result);
+    }
 
-        [Fact]
-        public void ctor_strings()
-        {
-            Assert.NotNull(new TsvDataAttribute("example.tsv"));
-        }
+    [Fact]
+    public void ctor_strings()
+    {
+        Assert.NotNull(new TsvDataAttribute("example.tsv"));
+    }
 
-        [Fact]
-        public void ctor_stringsEmpty()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new TsvDataAttribute(new List<string>().ToArray()));
-        }
+    [Fact]
+    public void ctor_stringsEmpty()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new TsvDataAttribute(new List<string>().ToArray()));
+    }
 
-        [Fact]
-        public void ctor_stringsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new TsvDataAttribute(null));
-        }
+    [Fact]
+    public void ctor_stringsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => new TsvDataAttribute(null));
+    }
 
-        // [Fact]
-        // public void op_GetData_MethodInfoNull_Types()
-        // {
-        //     var obj = new TsvDataAttribute("example.tsv");
+    // [Fact]
+    // public void op_GetData_MethodInfoNull_Types()
+    // {
+    //     var obj = new TsvDataAttribute("example.tsv");
+    //
+    //     Assert.Throws<ArgumentNullException>(() => obj.GetData(null, new[] { typeof(TsvDataSheet) }).ToList());
+    // }
+
+    [Fact(Skip = "No time to refactor this beast")]
+    public void op_GetData_MethodInfo_TypesNull()
+    {
+        var obj = new TsvDataAttribute("example.tsv");
+
+        Assert.Throws<ArgumentNullException>(() => obj.GetData(GetType().GetMethod("usage")).ToList());
+    }
+
+    [Fact(Skip = "No time to refactor this beast")]
+    public void op_GetData_MethodInfo_Types_whenInvalidParameterType()
+    {
+        // var obj = new TsvDataAttribute("example.tsv");
         //
-        //     Assert.Throws<ArgumentNullException>(() => obj.GetData(null, new[] { typeof(TsvDataSheet) }).ToList());
-        // }
+        // Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(string) }).ToList());
+    }
 
-        [Fact(Skip="No time to refactor this beast")]
-        public void op_GetData_MethodInfo_TypesNull()
-        {
-            var obj = new TsvDataAttribute("example.tsv");
+    [Fact]
+    public void op_GetData_MethodInfo_Types_whenParameterCountMismatch()
+    {
+        // var obj = new TsvDataAttribute("one.tsv", "two.tsv");
+        //
+        // Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(TsvDataSheet) }).ToList());
+    }
 
-            Assert.Throws<ArgumentNullException>(() => obj.GetData(GetType().GetMethod("usage")).ToList());
-        }
+    [Fact]
+    public void prop_FileName()
+    {
+        Assert.True(new PropertyExpectations<TsvDataAttribute>(x => x.Files)
+                    .TypeIs<IEnumerable<string>>()
+                    .IsNotDecorated()
+                    .Result);
+    }
 
-        [Fact(Skip="No time to refactor this beast")]
-        public void op_GetData_MethodInfo_Types_whenInvalidParameterType()
-        {
-            // var obj = new TsvDataAttribute("example.tsv");
-            //
-            // Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(string) }).ToList());
-        }
+    [Theory]
+    [TsvData("example.tsv")]
+    public void usage(TsvDataSheet tsv)
+    {
+        Assert.Equal("A1", tsv.First()["A"]);
+        Assert.Equal("B2", tsv.Last()["B"]);
+    }
 
-        [Fact]
-        public void op_GetData_MethodInfo_Types_whenParameterCountMismatch()
-        {
-            // var obj = new TsvDataAttribute("one.tsv", "two.tsv");
-            //
-            // Assert.Throws<InvalidOperationException>(() => obj.GetData(GetType().GetMethod("usage"), new[] { typeof(TsvDataSheet) }).ToList());
-        }
+    [Theory]
+    [TsvData("one.tsv", "two.tsv")]
+    public void usage_whenDataSet(DataSet data)
+    {
+        if (null == data)
+            throw new ArgumentNullException("data");
 
-        [Fact]
-        public void prop_FileName()
-        {
-            Assert.True(new PropertyExpectations<TsvDataAttribute>(x => x.Files)
-                            .TypeIs<IEnumerable<string>>()
-                            .IsNotDecorated()
-                            .Result);
-        }
+        Assert.Equal("one", data.Tables["one.tsv"].Rows[0].Field<string>("COLUMN"));
+        Assert.Equal("two", data.Tables["two.tsv"].Rows[0].Field<string>("COLUMN"));
+    }
 
-        [Theory]
-        [TsvData("example.tsv")]
-        public void usage(TsvDataSheet tsv)
-        {
-            Assert.Equal("A1", tsv.First()["A"]);
-            Assert.Equal("B2", tsv.Last()["B"]);
-        }
+    [Theory]
+    [TsvData("example.tsv")]
+    [TsvData("example.tsv")]
+    public void usage_whenDataTable(DataTable table)
+    {
+        if (null == table)
+            throw new ArgumentNullException("table");
 
-        [Theory]
-        [TsvData("one.tsv", "two.tsv")]
-        public void usage_whenDataSet(DataSet data)
-        {
-            if (null == data)
-            {
-                throw new ArgumentNullException("data");
-            }
+        Assert.Equal("A1", table.Rows[0].Field<string>("A"));
+        Assert.Equal("B2", table.Rows[1].Field<string>("B"));
+    }
 
-            Assert.Equal("one", data.Tables["one.tsv"].Rows[0].Field<string>("COLUMN"));
-            Assert.Equal("two", data.Tables["two.tsv"].Rows[0].Field<string>("COLUMN"));
-        }
+    [Theory]
+    [TsvData("example.tsv")]
+    public void usage_whenIEnumerableParameter(IEnumerable<KeyStringDictionary> data)
+    {
+        // ReSharper disable PossibleMultipleEnumeration
+        Assert.Equal("A1", data.First()["A"]);
+        Assert.Equal("B2", data.Last()["B"]);
 
-        [Theory]
-        [TsvData("example.tsv")]
-        [TsvData("example.tsv")]
-        public void usage_whenDataTable(DataTable table)
-        {
-            if (null == table)
-            {
-                throw new ArgumentNullException("table");
-            }
+        // ReSharper restore PossibleMultipleEnumeration
+    }
 
-            Assert.Equal("A1", table.Rows[0].Field<string>("A"));
-            Assert.Equal("B2", table.Rows[1].Field<string>("B"));
-        }
-
-        [Theory]
-        [TsvData("example.tsv")]
-        public void usage_whenIEnumerableParameter(IEnumerable<KeyStringDictionary> data)
-        {
-            // ReSharper disable PossibleMultipleEnumeration
-            Assert.Equal("A1", data.First()["A"]);
-            Assert.Equal("B2", data.Last()["B"]);
-
-            // ReSharper restore PossibleMultipleEnumeration
-        }
-
-        [Theory]
-        [TsvData("one.tsv", "two.tsv")]
-        public void usage_whenMultipleParameters(TsvDataSheet one,
-                                                 TsvDataSheet two)
-        {
-            Assert.Equal("one", one.First()["COLUMN"]);
-            Assert.Equal("two", two.First()["COLUMN"]);
-        }
+    [Theory]
+    [TsvData("one.tsv", "two.tsv")]
+    public void usage_whenMultipleParameters(TsvDataSheet one,
+                                             TsvDataSheet two)
+    {
+        Assert.Equal("one", one.First()["COLUMN"]);
+        Assert.Equal("two", two.First()["COLUMN"]);
     }
 }

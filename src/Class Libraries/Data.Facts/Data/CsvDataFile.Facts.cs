@@ -1,62 +1,61 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+using WhenFresh.Utilities.IO;
+
+public sealed class CsvDataFileFacts
 {
-    using WhenFresh.Utilities.IO;
-
-    public sealed class CsvDataFileFacts
+    [Fact]
+    public void a_definition()
     {
-        [Fact]
-        public void a_definition()
+        Assert.True(new TypeExpectations<CsvDataFile>()
+                    .DerivesFrom<DataFile>()
+                    .IsConcreteClass()
+                    .IsUnsealed()
+                    .NoDefaultConstructor()
+                    .IsNotDecorated()
+                    .Result);
+    }
+
+    [Fact]
+    public void ctor_FileInfo()
+    {
+        using (var temp = new TempFile())
         {
-            Assert.True(new TypeExpectations<CsvDataFile>()
-                            .DerivesFrom<DataFile>()
-                            .IsConcreteClass()
-                            .IsUnsealed()
-                            .NoDefaultConstructor()
-                            .IsNotDecorated()
-                            .Result);
+            Assert.NotNull(new CsvDataFile(temp.Info));
         }
+    }
 
-        [Fact]
-        public void ctor_FileInfo()
+    [Fact]
+    public void ctor_FileInfoMissing()
+    {
+        using (var temp = new TempDirectory())
         {
-            using (var temp = new TempFile())
-            {
-                Assert.NotNull(new CsvDataFile(temp.Info));
-            }
+            // ReSharper disable AccessToDisposedClosure
+            Assert.Throws<FileNotFoundException>(() => new CsvDataFile(temp.Info.ToFile("missing.txt")));
+            // ReSharper restore AccessToDisposedClosure
         }
+    }
 
-        [Fact]
-        public void ctor_FileInfoMissing()
+    [Fact]
+    public void ctor_FileInfoNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => new CsvDataFile(null));
+    }
+
+    [Fact]
+    public void op_IEnumerable_GetEnumerator()
+    {
+        using (var temp = new TempDirectory())
         {
-            using (var temp = new TempDirectory())
-            {
-                // ReSharper disable AccessToDisposedClosure
-                Assert.Throws<FileNotFoundException>(() => new CsvDataFile(temp.Info.ToFile("missing.txt")));
-                // ReSharper restore AccessToDisposedClosure
-            }
-        }
+            var file = temp
+                       .Info
+                       .ToFile("Data.csv")
+                       .AppendLine("name")
+                       .AppendLine("Example");
+            var sheet = new CsvDataFile(file).First();
 
-        [Fact]
-        public void ctor_FileInfoNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CsvDataFile(null));
-        }
-
-        [Fact]
-        public void op_IEnumerable_GetEnumerator()
-        {
-            using (var temp = new TempDirectory())
-            {
-                var file = temp
-                    .Info
-                    .ToFile("Data.csv")
-                    .AppendLine("name")
-                    .AppendLine("Example");
-                var sheet = new CsvDataFile(file).First();
-
-                Assert.Equal("Data", sheet.Title);
-                Assert.Equal("Example", sheet.First()["name"]);
-            }
+            Assert.Equal("Data", sheet.Title);
+            Assert.Equal("Example", sheet.First()["name"]);
         }
     }
 }

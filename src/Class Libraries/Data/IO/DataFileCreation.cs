@@ -1,73 +1,63 @@
-﻿namespace WhenFresh.Utilities.IO
+﻿namespace WhenFresh.Utilities.IO;
+
+using System.Diagnostics;
+using WhenFresh.Utilities.Data;
+
+public class DataFileCreation
 {
-    using System.Diagnostics;
-    using WhenFresh.Utilities.IO;
-    using WhenFresh.Utilities.Data;
-
-    public class DataFileCreation
+    public DataFileCreation(FileInfo destination,
+                            DateTime modified)
     {
-        public DataFileCreation(FileInfo destination,
-                                DateTime modified)
+        if (null == destination)
+            throw new ArgumentNullException("destination");
+
+        Destination = destination;
+        Modified = modified;
+    }
+
+    public int Count { get; private set; }
+
+    public FileInfo Destination { get; }
+
+    public DateTime Modified { get; }
+
+    public Stopwatch Stopwatch { get; private set; }
+
+    public int Create(IEnumerable<KeyStringDictionary> data)
+    {
+        if (null == data)
+            throw new ArgumentNullException("data");
+
+        if (Destination.Exists)
+            throw new IOException("\"{0}\" already exists.".FormatWith(Destination.FullName));
+
+        Count = 0;
+        Stopwatch = new Stopwatch();
+        Stopwatch.Start();
+
+        using (var temp = new TempFile(CurrentTempDirectory.Location))
         {
-            if (null == destination)
+            using (var writers = new StreamWriterDictionary())
             {
-                throw new ArgumentNullException("destination");
-            }
-
-            Destination = destination;
-            Modified = modified;
-        }
-
-        public int Count { get; private set; }
-
-        public FileInfo Destination { get; private set; }
-
-        public DateTime Modified { get; private set; }
-
-        public Stopwatch Stopwatch { get; private set; }
-
-        public int Create(IEnumerable<KeyStringDictionary> data)
-        {
-            if (null == data)
-            {
-                throw new ArgumentNullException("data");
-            }
-
-            if (Destination.Exists)
-            {
-                throw new IOException("\"{0}\" already exists.".FormatWith(Destination.FullName));
-            }
-
-            Count = 0;
-            Stopwatch = new Stopwatch();
-            Stopwatch.Start();
-
-            using (var temp = new TempFile(CurrentTempDirectory.Location))
-            {
-                using (var writers = new StreamWriterDictionary())
+                foreach (var entry in data)
                 {
-                    foreach (var entry in data)
-                    {
-                        Count++;
-                        if (null == writers.FirstLine)
-                        {
-                            writers.FirstLine = Csv.Header(entry);
-                        }
+                    Count++;
+                    if (null == writers.FirstLine)
+                        writers.FirstLine = Csv.Header(entry);
 
-                        writers.Item(temp.Info).WriteLine(Csv.Line(entry));
-                    }
-                }
-
-                if (Count.IsNot(0))
-                {
-                    temp.Info.CopyTo(Destination);
-
-                    Destination.SetDate(Modified);
+                    writers.Item(temp.Info).WriteLine(Csv.Line(entry));
                 }
             }
 
-            Stopwatch.Stop();
-            return Count;
+            if (Count.IsNot(0))
+            {
+                temp.Info.CopyTo(Destination);
+
+                Destination.SetDate(Modified);
+            }
         }
+
+        Stopwatch.Stop();
+        return Count;
     }
 }

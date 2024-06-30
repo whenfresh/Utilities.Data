@@ -1,46 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>Cavity.Data.Xunit.Facts</AssemblyName>
-    <AssemblyTitle>Cavity.Data.Xunit.Facts.dll</AssemblyTitle>
-    <Description>Cavity : xUnit Data Facts Library (Release)</Description>
-    <TargetFramework>net80</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="WhenFresh.Utilities.Core" Version="3.0.0-preview.17" />
-    <PackageReference Include="WhenFresh.Utilities.Testing.Unit" Version="3.0.0-preview.11" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
-    <PackageReference Include="Moq" Version="4.20.70"/>
-    <PackageReference Include="xunit" Version="2.8.1"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Properties\CodeAnalysis.dictionary" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="two.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="one.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="example.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="example.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="one.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="two.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Data.Xunit\Data.Xunit.csproj" />
-    <ProjectReference Include="..\Data\Data.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <AssemblyName>Cavity.Data.Xunit.Facts</AssemblyName>
+        <AssemblyTitle>Cavity.Data.Xunit.Facts.dll</AssemblyTitle>
+        <Description>Cavity : xUnit Data Facts Library (Release)</Description>
+        <TargetFramework>net80</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="WhenFresh.Utilities.Core" Version="3.0.0-preview.17"/>
+        <PackageReference Include="WhenFresh.Utilities.Testing.Unit" Version="3.0.0-preview.11"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
+        <PackageReference Include="Moq" Version="4.20.70"/>
+        <PackageReference Include="xunit" Version="2.8.1"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Properties\CodeAnalysis.dictionary"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="two.tsv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="one.tsv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="example.tsv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="example.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="one.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="two.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Data.Xunit\Data.Xunit.csproj"/>
+        <ProjectReference Include="..\Data\Data.csproj"/>
+    </ItemGroup>
 </Project>

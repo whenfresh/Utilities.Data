@@ -1,38 +1,31 @@
-﻿namespace WhenFresh.Utilities.Data
+﻿namespace WhenFresh.Utilities.Data;
+
+public sealed class ShardByValue : IIdentifyShard
 {
-    public sealed class ShardByValue : IIdentifyShard
+    public ShardByValue(string column)
+        : this()
     {
-        public ShardByValue(string column)
-            : this()
-        {
-            if (null == column)
-            {
-                throw new ArgumentNullException("column");
-            }
+        if (null == column)
+            throw new ArgumentNullException("column");
 
-            column = column.Trim();
-            if (0 == column.Length)
-            {
-                throw new ArgumentOutOfRangeException("column");
-            }
+        column = column.Trim();
+        if (0 == column.Length)
+            throw new ArgumentOutOfRangeException("column");
 
-            Column = column;
-        }
+        Column = column;
+    }
 
-        private ShardByValue()
-        {
-        }
+    private ShardByValue()
+    {
+    }
 
-        public string Column { get; private set; }
+    public string Column { get; }
 
-        public string IdentifyShard(KeyStringDictionary entry)
-        {
-            if (null == entry)
-            {
-                throw new ArgumentNullException("entry");
-            }
+    public string IdentifyShard(KeyStringDictionary entry)
+    {
+        if (null == entry)
+            throw new ArgumentNullException("entry");
 
-            return (entry[Column] ?? string.Empty).Trim();
-        }
+        return (entry[Column] ?? string.Empty).Trim();
     }
 }

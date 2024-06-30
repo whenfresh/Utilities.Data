@@ -1,5 +1,5 @@
 <Project>
-<!--    language -->
+    <!--    language -->
     <PropertyGroup>
         <ImplicitUsings>true</ImplicitUsings>
         <LangVersion>latestmajor</LangVersion>
@@ -7,7 +7,7 @@
         <AssemblyTitle>WhenFresh.Utilities.$(MSBuildProjectName).dll</AssemblyTitle>
         <RootNamespace>WhenFresh.Utilities</RootNamespace>
     </PropertyGroup>
-<!--    nuget-->
+    <!--    nuget-->
     <PropertyGroup>
         <Authors>Alan Dean, Sebastien Lambla</Authors>
         <Company>WhenFresh</Company>
