@@ -1,4 +1,4 @@
-﻿namespace WhenFresh.Utilities.Data.Xunit.Data
+﻿namespace WhenFresh.Utilities.Data
 {
     using System;
     using System.Collections.Generic;
@@ -8,13 +8,11 @@
     using System.Linq;
     using System.Net;
     using System.Reflection;
-    using global::Xunit.Extensions;
-    using global::Xunit.Sdk;
     using WhenFresh.Utilities.Core;
     using WhenFresh.Utilities.Core.Collections;
     using WhenFresh.Utilities.Core.IO;
-    using WhenFresh.Utilities.Data.Data;
-    using WhenFresh.Utilities.Data.Xunit.Properties;
+    using WhenFresh.Utilities.Properties;
+    using Xunit.Sdk;
 #if !NET20
 #endif
 

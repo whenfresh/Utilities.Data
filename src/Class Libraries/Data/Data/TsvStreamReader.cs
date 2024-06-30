@@ -1,8 +1,8 @@
-﻿namespace WhenFresh.Utilities.Data.Data
+﻿namespace WhenFresh.Utilities.Data
 {
     using System.Collections.ObjectModel;
     using System.Linq;
-    using WhenFresh.Utilities.Data.Properties;
+    using WhenFresh.Utilities.Properties;
 #if !NET20
 #endif
 

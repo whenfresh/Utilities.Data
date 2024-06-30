@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WhenFresh.Utilities.Data.Xunit.Properties {
+namespace WhenFresh.Utilities.Properties {
     using System;
     
     
@@ -28,7 +28,7 @@ namespace WhenFresh.Utilities.Data.Xunit.Properties {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WhenFresh.Utilities.Data.Xunit.Properties.Resources", typeof(Resources).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WhenFresh.Utilities.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

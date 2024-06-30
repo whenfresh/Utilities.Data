@@ -1,9 +1,7 @@
-﻿namespace WhenFresh.Utilities.Data.Xunit.Facts.Data
+﻿namespace WhenFresh.Utilities.Data
 {
-    using global::Xunit.Sdk;
-    using WhenFresh.Utilities.Data.Data;
-    using WhenFresh.Utilities.Data.Xunit.Data;
     using WhenFresh.Utilities.Testing.Unit;
+    using Xunit.Sdk;
 
     public sealed class TsvDataAttributeFacts
     {

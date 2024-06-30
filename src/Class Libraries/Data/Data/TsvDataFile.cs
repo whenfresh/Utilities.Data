@@ -1,4 +1,4 @@
-﻿namespace WhenFresh.Utilities.Data.Data
+﻿namespace WhenFresh.Utilities.Data
 {
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is not a collection.")]
     public class TsvDataFile : DataFile

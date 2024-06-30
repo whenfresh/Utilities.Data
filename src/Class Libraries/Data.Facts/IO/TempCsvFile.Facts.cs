@@ -1,7 +1,7 @@
-﻿namespace WhenFresh.Utilities.Data.Facts.IO
+﻿namespace WhenFresh.Utilities.IO
 {
     using WhenFresh.Utilities.Core.IO;
-    using WhenFresh.Utilities.Data.IO;
+    using WhenFresh.Utilities.Data;
 
     public sealed class TempCsvFileFacts
     {

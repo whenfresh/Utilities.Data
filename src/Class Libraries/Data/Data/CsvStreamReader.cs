@@ -1,8 +1,8 @@
-﻿namespace WhenFresh.Utilities.Data.Data
+﻿namespace WhenFresh.Utilities.Data
 {
     using System.Collections.ObjectModel;
     using System.Text;
-    using WhenFresh.Utilities.Data.Properties;
+    using WhenFresh.Utilities.Properties;
 
     public class CsvStreamReader : StreamReader
     {

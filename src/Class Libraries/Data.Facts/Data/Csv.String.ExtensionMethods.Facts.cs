@@ -1,4 +1,4 @@
-﻿namespace WhenFresh.Utilities.Data.Facts.Data
+﻿namespace WhenFresh.Utilities.Data
 {
     public sealed class CsvStringExtensionMethodsFacts
     {

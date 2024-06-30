@@ -1,8 +1,8 @@
-﻿namespace WhenFresh.Utilities.Data.IO
+﻿namespace WhenFresh.Utilities.IO
 {
     using System.Diagnostics;
     using WhenFresh.Utilities.Core.IO;
-    using WhenFresh.Utilities.Data.Data;
+    using WhenFresh.Utilities.Data;
 
     public class DataFileCreation
     {
