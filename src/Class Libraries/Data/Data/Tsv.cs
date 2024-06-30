@@ -3,7 +3,7 @@
     using System.Data;
     using System.Linq;
     using System.Text;
-    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.IO;
 #if !NET20
 #endif
 

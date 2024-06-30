@@ -1,6 +1,6 @@
 ﻿namespace WhenFresh.Utilities.IO
 {
-    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.IO;
     using WhenFresh.Utilities.Data;
 
     public sealed class TempCsvFile : TempFile

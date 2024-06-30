@@ -2,8 +2,8 @@
 {
     using System.Data;
     using System.Globalization;
-    using WhenFresh.Utilities.Core.Data;
-    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.Data;
+    using WhenFresh.Utilities.IO;
 
     public sealed class CsvFacts
     {

@@ -6,8 +6,8 @@
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
-    using WhenFresh.Utilities.Core;
-    using WhenFresh.Utilities.Core.Collections;
+    using WhenFresh.Utilities;
+    using WhenFresh.Utilities.Collections;
     using WhenFresh.Utilities.Properties;
     using Xunit.Sdk;
 #if !NET20

@@ -1,6 +1,6 @@
 ﻿namespace WhenFresh.Utilities.Data
 {
-    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.IO;
 
     public sealed class DataFileFacts
     {

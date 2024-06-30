@@ -1,7 +1,7 @@
 ﻿namespace WhenFresh.Utilities.IO
 {
     using System.Diagnostics;
-    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities.IO;
     using WhenFresh.Utilities.Data;
 
     public sealed class DataFileCreationFacts

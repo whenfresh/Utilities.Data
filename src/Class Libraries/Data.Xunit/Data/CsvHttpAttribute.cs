@@ -8,9 +8,9 @@
     using System.Linq;
     using System.Net;
     using System.Reflection;
-    using WhenFresh.Utilities.Core;
-    using WhenFresh.Utilities.Core.Collections;
-    using WhenFresh.Utilities.Core.IO;
+    using WhenFresh.Utilities;
+    using WhenFresh.Utilities.Collections;
+    using WhenFresh.Utilities.IO;
     using WhenFresh.Utilities.Properties;
     using Xunit.Sdk;
 #if !NET20
